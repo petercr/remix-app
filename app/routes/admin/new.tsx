@@ -3,7 +3,7 @@ import type { ActionFunction } from "remix";
 import { createPost } from "~/$postId";
 import invariant from "tiny-invariant";
 
-type PostError = {
+export type PostError = {
   title?: boolean,
   slug?: boolean,
   markdown?: boolean
