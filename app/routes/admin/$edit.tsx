@@ -9,7 +9,7 @@ import type { PostError } from '~/routes/admin/new';
 
 export const action: ActionFunction = async ({ request }) => {
   await new Promise(res => setTimeout(res, 1000));
-  // need to use action props in order to getPost(slug) and fill in form
+  // This takes the new/updated info in the form and updates the file
 
   const formData = await request.formData();
 
@@ -36,10 +36,16 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect("/admin");
 };
 
+// Why am I not getting any params, I passed them in
 export const loader: LoaderFunction = async ({ params }) => {
-  // invariant(params.slug, "expected params.slug");
-  console.log({ params });
-  return getPost("fun-is-had");
+  if (params.slug === undefined) {
+    console.log("I'm missing those params", params);
+    return getPost("fun-is-had");
+  } else {
+    invariant(params.slug, "expected params.slug");
+    return getPost(params.slug);
+
+  }
 }
 
 export default function EditPost() {
@@ -49,7 +55,7 @@ export default function EditPost() {
     const turndownService = new TurndownService()
     // I think I need to call getPost(slug) in the data loader
     const formBody = turndownService.turndown(post.html);
-    console.log("Load up that post slug 🐌", formBody);
+    console.log("Here's the MD for the form body", formBody);
 
   }
   const post = useLoaderData();
